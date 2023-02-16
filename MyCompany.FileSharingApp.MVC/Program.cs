@@ -1,18 +1,25 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using MyCompany.FileSharingApp.Business.Abstract;
+using MyCompany.FileSharingApp.Business.Concrete;
 using MyCompany.FileSharingApp.DataAccess.Abstract;
 using MyCompany.FileSharingApp.DataAccess.Concrete.EntityFramework;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddScoped<IFileDal,EfFileDal>();
-builder.Services.AddScoped<IFolderDal,EfFolderDal>();
-builder.Services.AddScoped<IUserDal,EfUserDal>();
+builder.Services.AddScoped<IUserService, UserManager>();
+
+builder.Services.AddScoped<IFileDal, EfFileDal>();
+builder.Services.AddScoped<IFolderDal, EfFolderDal>();
+builder.Services.AddScoped<IUserDal, EfUserDal>();
 
 builder.Services.AddDbContext<FileSharingAppContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlCon")));
+
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 
 

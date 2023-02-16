@@ -8,7 +8,11 @@
 
   <ItemGroup>
     <Folder Include="Abstract\" />
-    <Folder Include="Concrete\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MyCompany.FileSharingApp.DataAccess\MyCompany.FileSharingApp.DataAccess.csproj" />
+    <ProjectReference Include="..\MyCompany.FileSharingApp.Entities\MyCompany.FileSharingApp.Entities.csproj" />
   </ItemGroup>
 
 </Project>
