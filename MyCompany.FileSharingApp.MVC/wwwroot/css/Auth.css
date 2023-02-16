@@ -1,0 +1,35 @@
+﻿body {
+    background-image: url('/images/bglogin.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.asd {
+    border-radius: 10px;
+    background-color: rgba(42,42,42,0.4);
+    width: 40%;
+}
+
+.submit {
+    width: 100%;
+}
+
+.header {
+    margin-bottom: 15px;
+}
+
+    .header span {
+        text-align: center;
+        display: block;
+        font-size: 20px;
+        color: white;
+    }
+
+.link {
+    cursor: pointer;
+}

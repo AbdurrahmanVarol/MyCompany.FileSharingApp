@@ -1,0 +1,45 @@
+﻿@model LoginModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+<div class="asd shadow p-3 mb-5 bg-body-tertiary rounded">
+    <div class="header">
+        <span>Hello</span>
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["Message"]
+            </div>
+        }
+    </div>
+    <form asp-action="Login" asp-controller="Auth" method="post">
+        <div class=" mb-3">
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon1">
+                    <img src="~/icons/person.svg" />
+                </span>
+                <input class="form-control" asp-for="UserName" placeholder="User name">
+            </div>
+            <span class="form-text text-danger d-block" asp-validation-for="UserName"></span>
+        </div>
+        <div class=" mb-3">
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon1">
+                    <img src="~/icons/lock.svg" />
+                </span>
+                <input type="password" class="form-control" asp-for="Password" aria-label="Password" aria-describedby="basic-addon1" placeholder="Password">
+            </div>
+            <span class="form-text text-danger" asp-validation-for="Password"></span>
+        </div>
+        <div class="mb-3 form-check">
+            <input class="form-check-input" asp-for="IsKeepLoggedIn">
+            <label class="form-check-label" asp-for="IsKeepLoggedIn">Remember Me</label>
+        </div>
+        <button type="submit" class="submit btn btn-primary">Login</button>
+    </form>
+    <div class="">
+        <a class="link" asp-action="register" asp-controller="auth">Dont have an account?</a>
+    </div>
+</div>

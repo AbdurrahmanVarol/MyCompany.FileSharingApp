@@ -1,0 +1,49 @@
+﻿@model UserModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+<div class="asd shadow p-3 mb-5 bg-body-tertiary rounded">
+    <div class="header">
+        <span>Hello</span>
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["Message"]
+            </div>
+        }
+    </div>
+    <form asp-action="Login" asp-controller="Auth" method="post">
+        <div class=" mb-3">
+            <input class="form-control" asp-for="FirstName" placeholder="First name">
+            <span class="form-text text-danger d-block" asp-validation-for="FirstName"></span>
+        </div>
+        <div class=" mb-3">
+            <input class="form-control" asp-for="LastName" placeholder="Last name">
+            <span class="form-text text-danger d-block" asp-validation-for="LastName"></span>
+        </div>
+        <div class=" mb-3">
+            <input class="form-control" asp-for="Email" placeholder="Email">
+            <span class="form-text text-danger d-block" asp-validation-for="Email"></span>
+        </div>
+        <div class=" mb-3">
+            <input class="form-control" asp-for="UserName" placeholder="User name">
+            <span class="form-text text-danger d-block" asp-validation-for="UserName"></span>
+        </div>
+        <div class=" mb-3">
+            <input type="password" class="form-control" asp-for="Password" aria-label="Password" aria-describedby="basic-addon1" placeholder="Password">
+
+            <span class="form-text text-danger" asp-validation-for="Password"></span>
+        </div>
+        <div class=" mb-3">
+            <input type="password" class="form-control" asp-for="ConfirmPassword" aria-label="Password" placeholder="Confirm Password">
+
+            <span class="form-text text-danger" asp-validation-for="ConfirmPassword"></span>
+        </div>
+        <button type="submit" class="submit btn btn-primary">Register</button>
+    </form>
+    <div class="">
+        <a class="link" asp-action="login" asp-controller="auth">have an account?</a>
+    </div>
+</div>
