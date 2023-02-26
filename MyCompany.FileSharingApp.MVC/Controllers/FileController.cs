@@ -1,0 +1,116 @@
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.FileProviders;
+using MyCompany.FileSharingApp.Business.Abstract;
+using MyCompany.FileSharingApp.Entities.Concrete;
+using MyCompany.FileSharingApp.MVC.Models;
+using static NuGet.Packaging.PackagingConstants;
+
+namespace MyCompany.FileSharingApp.MVC.Controllers
+{
+    [Authorize]
+    public class FileController : Controller
+    {
+        private readonly IUserService _userService;
+        private readonly IFolderService _folderService;
+        private readonly IFileService _fileService;
+        private readonly IMapper _mapper;
+        private readonly IFileProvider _fileProvider;
+        private Guid UserId => Guid.Parse(User.Claims.First().Value);
+
+        public FileController(IUserService userService, IFolderService folderService, IFileService fileService, IMapper mapper, IFileProvider fileProvider)
+        {
+            _userService = userService;
+            _folderService = folderService;
+            _fileService = fileService;
+            _mapper = mapper;
+            _fileProvider = fileProvider;
+        }
+
+        public IActionResult AddFile(Guid? folderId)
+        {
+            return View(new FileModel { FolderId = folderId ?? UserId });
+        }
+        [HttpPost]
+        public IActionResult AddFile(FileModel fileModel)
+        {
+            string fullName = fileModel.FormFile.FileName;
+            var fileName = Path.GetFileNameWithoutExtension(fullName);
+            var extension = Path.GetExtension(fullName);
+            var file = new MyCompany.FileSharingApp.Entities.Concrete.File
+            {
+                FileName = fileName,
+                FileExtention = extension,
+                FileUploadTime = DateTime.UtcNow,
+                FileSize = fileModel.FormFile.Length,
+                UserId = UserId,
+                FolderId = fileModel.FolderId
+            };
+            _fileService.Add(file);
+
+            var path = _fileProvider.GetDirectoryContents("").First(x => x.Name == "App_Data").PhysicalPath;
+
+
+
+            var folderPath = _folderService.GetFolderPath((Guid)fileModel.FolderId);
+
+            var fullPath = Path.Combine(path, folderPath, file.FileId.ToString());
+
+            var stream = new FileStream(fullPath, FileMode.Create);
+
+            fileModel.FormFile.CopyTo(stream);
+            stream.Close();
+            return RedirectToAction("Index","home");
+        }
+        public IActionResult UpdateFile(Guid fileId)
+        {
+            var file = _fileService.GetById(fileId);
+            if (file is null)
+                return RedirectToAction("index", "home");
+            var fileModel = _mapper.Map<FileModel>(file);
+            return View(fileModel);
+        }
+        [HttpPost]
+        public IActionResult UpdateFile(FileModel fileModel)
+        {
+            var file = _fileService.GetById((Guid)fileModel.FileId);
+
+            if (file is null)
+                return RedirectToAction("index", "home");
+
+            file.FileName = fileModel.FileName;
+            _fileService.Update(file);
+            TempData["message"] = "File Name Updated";
+            return RedirectToAction("index", "home");
+        }
+        public IActionResult DeleteFile(Guid fileId)
+        {
+            var file = _fileService.GetById(fileId);
+            _fileService.Delete(file);
+            var folderPath = _folderService.GetFolderPath((Guid)file.FolderId);
+            var appData = _fileProvider.GetDirectoryContents("").First(p => p.Name.Equals("App_Data")).PhysicalPath;
+            string path = Path.Combine(appData, folderPath, file.FileId.ToString()); ;
+
+            if (System.IO.File.Exists(path))
+            {
+                System.IO.File.Delete(path);
+            }
+
+            return Json("");
+        }
+        public IActionResult DownloadFile(Guid? fileId)
+        {
+            MyCompany.FileSharingApp.Entities.Concrete.File file = _fileService.GetById((Guid)fileId);
+            var path = _fileProvider.GetDirectoryContents("").First(x => x.Name == "App_Data").PhysicalPath;
+            var fullPath = file.FolderId == null ?
+                Path.Combine(path, UserId.ToString(), file.FileId.ToString()) :
+                Path.Combine(path, _folderService.GetFolderPath((Guid)file.FolderId), file.FileId.ToString());
+
+
+            var mimeType = MimeMapping.MimeUtility.GetMimeMapping(file.FileName + file.FileExtention);
+            byte[] buffer = System.IO.File.ReadAllBytes(fullPath);
+            return File(buffer, mimeType, file.FileName + file.FileExtention);
+        }
+    }
+}

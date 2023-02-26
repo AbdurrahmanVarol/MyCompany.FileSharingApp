@@ -1,0 +1,11 @@
+﻿@model FileModel
+@{
+    ViewData["Title"] = "AddFile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form asp-action="addfile" asp-controller="file" enctype="multipart/form-data">
+    <input type="hidden" asp-for="FolderId" />
+    <input asp-for="FormFile" type="file" class="form-control" />
+    <button type="submit" class=" btn btn-dark"> Upload</button>
+</form>

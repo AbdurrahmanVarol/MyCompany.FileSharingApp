@@ -1,0 +1,22 @@
+﻿@model FolderModel
+@{
+    ViewData["Title"] = "AddFolder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form class="form-control" asp-action="addfolder" asp-controller="folder" method="post">
+    <input type="hidden" asp-for="ParentFolderId" />
+    <div class="mb-3">
+        <label asp-for="FolderName">Folder Name</label>
+        <input class="form-control" asp-for="FolderName">
+        <span class="form-text text-danger d-block" asp-validation-for="FolderName"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="FolderName">Folder Name</label>
+        <textarea class="form-control" asp-for="FolderDescription"></textarea>
+        <span class="form-text text-danger d-block" asp-validation-for="FolderDescription"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Save</button>
+</form>
+
+

@@ -35,12 +35,11 @@ namespace MyCompany.FileSharingApp.Business.Concrete
 
         public User GetById(Guid id)
         {
-            //return _userDal.Get(p=>p.Id == id);
-            return new User();
+            return _userDal.Get(p => p.UserId == id);
         }
         public User GetByUserName(string userName)
         {
-            return new User();
+            return _userDal.Get(p => p.UserName.Equals(userName));
         }
 
         public void Update(User user)

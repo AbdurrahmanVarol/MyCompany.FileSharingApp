@@ -1,23 +1,30 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using MyCompany.FileSharingApp.Business.Abstract;
 using MyCompany.FileSharingApp.Business.Concrete;
 using MyCompany.FileSharingApp.DataAccess.Abstract;
 using MyCompany.FileSharingApp.DataAccess.Concrete.EntityFramework;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddScoped<IUserService, UserManager>();
+builder.Services.AddScoped<IFileService, FileManager>();
+builder.Services.AddScoped<IFolderService, FolderManager>();
 
 builder.Services.AddScoped<IFileDal, EfFileDal>();
 builder.Services.AddScoped<IFolderDal, EfFolderDal>();
 builder.Services.AddScoped<IUserDal, EfUserDal>();
 
-builder.Services.AddDbContext<FileSharingAppContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlCon")));
+builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory()));
+
+builder.Services.AddDbContext<FileSharingAppContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnecion")));
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
