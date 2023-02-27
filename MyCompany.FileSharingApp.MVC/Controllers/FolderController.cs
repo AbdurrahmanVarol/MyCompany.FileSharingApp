@@ -1,12 +1,16 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using MyCompany.FileSharingApp.Business.Abstract;
 using MyCompany.FileSharingApp.Entities.Concrete;
+using MyCompany.FileSharingApp.MVC.Filters;
 using MyCompany.FileSharingApp.MVC.Models;
 
 namespace MyCompany.FileSharingApp.MVC.Controllers
 {
+    [Authorize]
+    [CustomExceptionFilter]
     public class FolderController : Controller
     {
         private readonly IUserService _userService;

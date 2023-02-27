@@ -5,11 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using MyCompany.FileSharingApp.Business.Abstract;
 using MyCompany.FileSharingApp.Entities.Concrete;
+using MyCompany.FileSharingApp.MVC.Filters;
 using MyCompany.FileSharingApp.MVC.Models;
 using System.Security.Claims;
 
 namespace MyCompany.FileSharingApp.MVC.Controllers
 {
+    
     public class AuthController : Controller
     {
         private readonly IUserService _userService;
@@ -90,7 +92,7 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
             {
             }
             TempData["Message"] = "Kullanıcı Eklendi!!!";
-            return View();
+            return RedirectToAction("imdex","home");
         }
 
         public IActionResult Logout()

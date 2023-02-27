@@ -15,14 +15,17 @@
         }
     </div>
     <form asp-action="Register" asp-controller="Auth" method="post">
-        <div class=" mb-3">
-            <input class="form-control" asp-for="FirstName" placeholder="First name">
-            <span class="form-text text-danger d-block" asp-validation-for="FirstName"></span>
+        <div class="row">
+            <div class="mb-3 col-6">
+                <input class="form-control" asp-for="FirstName" placeholder="First name">
+                <span class="form-text text-danger d-block" asp-validation-for="FirstName"></span>
+            </div>
+            <div class="mb-3 col-6">
+                <input class="form-control" asp-for="LastName" placeholder="Last name">
+                <span class="form-text text-danger d-block" asp-validation-for="LastName"></span>
+            </div>
         </div>
-        <div class=" mb-3">
-            <input class="form-control" asp-for="LastName" placeholder="Last name">
-            <span class="form-text text-danger d-block" asp-validation-for="LastName"></span>
-        </div>
+        
         <div class=" mb-3">
             <input class="form-control" asp-for="Email" placeholder="Email">
             <span class="form-text text-danger d-block" asp-validation-for="Email"></span>
@@ -31,16 +34,18 @@
             <input class="form-control" asp-for="UserName" placeholder="User name">
             <span class="form-text text-danger d-block" asp-validation-for="UserName"></span>
         </div>
-        <div class=" mb-3">
-            <input type="password" class="form-control" asp-for="Password" aria-label="Password" aria-describedby="basic-addon1" placeholder="Password">
+       <div class="row">
+            <div class="mb-3 col-6">
+                <input type="password" class="form-control" asp-for="Password" aria-label="Password" aria-describedby="basic-addon1" placeholder="Password">
 
-            <span class="form-text text-danger" asp-validation-for="Password"></span>
-        </div>
-        <div class=" mb-3">
-            <input type="password" class="form-control" asp-for="ConfirmPassword" aria-label="Password" placeholder="Confirm Password">
+                <span class="form-text text-danger" asp-validation-for="Password"></span>
+            </div>
+            <div class="mb-3 col-6">
+                <input type="password" class="form-control" asp-for="ConfirmPassword" aria-label="Password" placeholder="Confirm Password">
 
-            <span class="form-text text-danger" asp-validation-for="ConfirmPassword"></span>
-        </div>
+                <span class="form-text text-danger" asp-validation-for="ConfirmPassword"></span>
+            </div>
+       </div>
         <button type="submit" class="submit btn btn-primary">Register</button>
     </form>
     <div class="">

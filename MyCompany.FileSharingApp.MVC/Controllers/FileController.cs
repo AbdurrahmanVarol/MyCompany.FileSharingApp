@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using MyCompany.FileSharingApp.Business.Abstract;
 using MyCompany.FileSharingApp.Entities.Concrete;
+using MyCompany.FileSharingApp.MVC.Filters;
 using MyCompany.FileSharingApp.MVC.Models;
 using static NuGet.Packaging.PackagingConstants;
 
 namespace MyCompany.FileSharingApp.MVC.Controllers
 {
     [Authorize]
+    [CustomExceptionFilter]
     public class FileController : Controller
     {
         private readonly IUserService _userService;

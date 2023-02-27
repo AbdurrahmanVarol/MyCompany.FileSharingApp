@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.FileProviders;
 using MyCompany.FileSharingApp.Business.Abstract;
 using MyCompany.FileSharingApp.Entities.Concrete;
+using MyCompany.FileSharingApp.MVC.Filters;
 using MyCompany.FileSharingApp.MVC.Models;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
@@ -14,6 +15,7 @@ using System.Runtime.InteropServices;
 namespace MyCompany.FileSharingApp.MVC.Controllers
 {
     [Authorize]
+    [CustomExceptionFilter]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
