@@ -115,7 +115,7 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
             {
                 Directory.Delete(path, true);
             }
-            return Json("");
+            return Json(new { IsSuccess = true, Result = "Folder Deleted." });
         }
     }
 }

@@ -92,7 +92,7 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
             {
             }
             TempData["Message"] = "Kullanıcı Eklendi!!!";
-            return RedirectToAction("imdex","home");
+            return RedirectToAction("index","home");
         }
 
         public IActionResult Logout()

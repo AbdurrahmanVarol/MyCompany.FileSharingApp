@@ -99,7 +99,7 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
                 System.IO.File.Delete(path);
             }
 
-            return Json("");
+            return Json(new {IsSuccess = true, Result = "File Deleted."});
         }
         public IActionResult DownloadFile(Guid? fileId)
         {
