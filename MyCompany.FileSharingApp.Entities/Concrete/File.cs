@@ -20,5 +20,7 @@ namespace MyCompany.FileSharingApp.Entities.Concrete
 
         public Guid? FolderId { get; set; }
         public Folder Folder { get; set; }
+
+        public ICollection<DisposableLink> Links { get; set; }
     }
 }

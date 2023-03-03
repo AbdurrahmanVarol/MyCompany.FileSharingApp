@@ -18,7 +18,7 @@ namespace MyCompany.FileSharingApp.Business.Concrete
         }
 
         public void Add(Entities.Concrete.File file)
-        {
+        {            
             _fileDal.Add(file);
         }
 

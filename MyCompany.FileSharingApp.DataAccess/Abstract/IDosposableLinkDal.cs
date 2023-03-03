@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyCompany.FileSharingApp.Business.Abstract
+namespace MyCompany.FileSharingApp.DataAccess.Abstract
 {
-    public interface IFileService : IServiceRepository<MyCompany.FileSharingApp.Entities.Concrete.File>
+    public interface IDosposableLinkDal : IEntityRepository<DisposableLink>
     {
     }
 }

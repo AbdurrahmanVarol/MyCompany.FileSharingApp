@@ -17,10 +17,12 @@ builder.Services.AddControllersWithViews().AddJsonOptions(x =>
 builder.Services.AddScoped<IUserService, UserManager>();
 builder.Services.AddScoped<IFileService, FileManager>();
 builder.Services.AddScoped<IFolderService, FolderManager>();
+builder.Services.AddScoped<IDisposableLinkService, DisposableLinkManager>();
 
 builder.Services.AddScoped<IFileDal, EfFileDal>();
 builder.Services.AddScoped<IFolderDal, EfFolderDal>();
 builder.Services.AddScoped<IUserDal, EfUserDal>();
+builder.Services.AddScoped<IDosposableLinkDal, EfDisposableLinkDal>();
 
 builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory()));
 
@@ -62,5 +64,10 @@ app.MapControllers();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Auth}/{action=Login}/{id?}");
+
+//using (var scope = app.Services.GetService<IServiceScopeFactory>().CreateScope())
+//{
+//    scope.ServiceProvider.GetRequiredService<FileSharingAppContext>().Database.Migrate();
+//}
 
 app.Run();

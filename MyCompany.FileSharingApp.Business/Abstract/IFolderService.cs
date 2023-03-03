@@ -8,15 +8,10 @@ using System.Threading.Tasks;
 
 namespace MyCompany.FileSharingApp.Business.Abstract
 {
-    public interface IFolderService
+    public interface IFolderService : IServiceRepository<Folder>
     {
-        List<Folder> GetAll();
         List<Folder> GetByUserId(Guid userId);
         List<Folder> GetFoldersWithFilesByUserId(Guid userId);
-        Folder GetById(Guid id);
-        void Add(Folder folder);
-        void Update(Folder folder);
-        void Delete(Folder folder);
         string GetFolderPath(Guid folderId);
     }
 }

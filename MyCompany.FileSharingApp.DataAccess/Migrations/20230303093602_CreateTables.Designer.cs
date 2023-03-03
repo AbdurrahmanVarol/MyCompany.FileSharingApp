@@ -12,7 +12,7 @@ using MyCompany.FileSharingApp.DataAccess.Concrete.EntityFramework;
 namespace MyCompany.FileSharingApp.DataAccess.Migrations
 {
     [DbContext(typeof(FileSharingAppContext))]
-    [Migration("20230226105603_CreateTables")]
+    [Migration("20230303093602_CreateTables")]
     partial class CreateTables
     {
         /// <inheritdoc />
@@ -24,6 +24,34 @@ namespace MyCompany.FileSharingApp.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("MyCompany.FileSharingApp.Entities.Concrete.DisposableLink", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Expire")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("FileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UsedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FileId");
+
+                    b.ToTable("DisposableLinks");
+                });
 
             modelBuilder.Entity("MyCompany.FileSharingApp.Entities.Concrete.File", b =>
                 {
@@ -126,6 +154,17 @@ namespace MyCompany.FileSharingApp.DataAccess.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("MyCompany.FileSharingApp.Entities.Concrete.DisposableLink", b =>
+                {
+                    b.HasOne("MyCompany.FileSharingApp.Entities.Concrete.File", "File")
+                        .WithMany("Links")
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("File");
+                });
+
             modelBuilder.Entity("MyCompany.FileSharingApp.Entities.Concrete.File", b =>
                 {
                     b.HasOne("MyCompany.FileSharingApp.Entities.Concrete.Folder", "Folder")
@@ -158,6 +197,11 @@ namespace MyCompany.FileSharingApp.DataAccess.Migrations
                     b.Navigation("ParentFolder");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MyCompany.FileSharingApp.Entities.Concrete.File", b =>
+                {
+                    b.Navigation("Links");
                 });
 
             modelBuilder.Entity("MyCompany.FileSharingApp.Entities.Concrete.Folder", b =>

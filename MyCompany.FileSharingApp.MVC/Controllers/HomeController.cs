@@ -41,6 +41,8 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
 
         public IActionResult Index()
         {
+            var a = HttpContext.User;
+
             return View();
         }
 

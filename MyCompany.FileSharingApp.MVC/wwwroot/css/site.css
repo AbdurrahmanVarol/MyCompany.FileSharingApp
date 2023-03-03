@@ -1,18 +1,79 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 140px;
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
+        bottom: 150%;
+        left: 50%;
+        margin-left: -75px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+        }
+
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
+
+.btn-custom-delete,
+.btn-custom-share,
+.btn-custom-download,
+.btn-custom-edit{
+    background-color: #4E6E81;
+    color: white;
+}
+
+.btn-custom-delete:hover {
+    background-color: #B33030;
+}
+.btn-custom-share:hover {
+    background-color: #59C1BD;
+}
+
+.btn-custom-edit:hover {
+    background-color: #FAC213;
+}
+.btn-custom-download:hover {
+    background-color: #4ab402;
+}
+

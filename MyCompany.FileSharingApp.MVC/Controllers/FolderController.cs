@@ -103,6 +103,7 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
             TempData["message"] = "Folder Updated.";
             return RedirectToAction("Index", "home");
         }
+        [HttpDelete]
         public IActionResult DeleteFolder(Guid folderId)
         {
             var folder = _folderService.GetById(folderId);

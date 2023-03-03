@@ -80,6 +80,33 @@ namespace MyCompany.FileSharingApp.DataAccess.Migrations
                         principalColumn: "UserId");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "DisposableLinks",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UsedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Expire = table.Column<int>(type: "int", nullable: false),
+                    IsUsed = table.Column<bool>(type: "bit", nullable: false),
+                    FileId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DisposableLinks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DisposableLinks_Files_FileId",
+                        column: x => x.FileId,
+                        principalTable: "Files",
+                        principalColumn: "FileId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DisposableLinks_FileId",
+                table: "DisposableLinks",
+                column: "FileId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Files_FolderId",
                 table: "Files",
@@ -104,6 +131,9 @@ namespace MyCompany.FileSharingApp.DataAccess.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "DisposableLinks");
+
             migrationBuilder.DropTable(
                 name: "Files");
 

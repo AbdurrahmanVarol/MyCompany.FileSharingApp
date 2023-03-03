@@ -47,10 +47,10 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
                 AuthenticationProperties authenticationProperties = new AuthenticationProperties
                 {
                     AllowRefresh = true,
-                    IsPersistent = loginModel.IsKeepLoggedIn
+                    IsPersistent = loginModel.IsKeepLoggedIn,
                 };
 
-                HttpContext.SignInAsync(new ClaimsPrincipal(claimsIdentity), authenticationProperties).Wait();
+                HttpContext.SignInAsync(new ClaimsPrincipal(claimsIdentity), authenticationProperties).GetAwaiter().GetResult();
                 return RedirectToAction("index", "home");
             }
             TempData["Message"] = "Kullanıcı adı ya da şifre yanlış";
@@ -97,7 +97,7 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
 
         public IActionResult Logout()
         {
-            HttpContext.SignOutAsync().Wait();
+            HttpContext.SignOutAsync().GetAwaiter().GetResult();
             return RedirectToAction("Login");
         }
     }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyCompany.FileSharingApp.Business.Abstract
 {
-    public interface IFileService : IServiceRepository<MyCompany.FileSharingApp.Entities.Concrete.File>
+    public interface IDisposableLinkService : IServiceRepository<DisposableLink>
     {
     }
 }

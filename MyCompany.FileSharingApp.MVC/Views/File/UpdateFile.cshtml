@@ -3,9 +3,9 @@
     ViewData["Title"] = "AddFile";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<form asp-action="addfile" asp-controller="file" enctype="multipart/form-data">
-    <input type="hidden" asp-for="FolderId" />
+<h1 class="text-center">Edit File</h1>
+<form asp-action="updatefile" asp-controller="file" enctype="multipart/form-data">
+    <input type="hidden" asp-for="FileId" />
     <input asp-for="FileName" class="form-control" />
     <button type="submit" class=" btn btn-dark"> Upload</button>
 </form>

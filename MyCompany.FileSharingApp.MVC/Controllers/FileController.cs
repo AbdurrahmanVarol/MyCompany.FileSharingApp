@@ -6,6 +6,7 @@ using MyCompany.FileSharingApp.Business.Abstract;
 using MyCompany.FileSharingApp.Entities.Concrete;
 using MyCompany.FileSharingApp.MVC.Filters;
 using MyCompany.FileSharingApp.MVC.Models;
+using System.Security.Claims;
 using static NuGet.Packaging.PackagingConstants;
 
 namespace MyCompany.FileSharingApp.MVC.Controllers
@@ -19,7 +20,7 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
         private readonly IFileService _fileService;
         private readonly IMapper _mapper;
         private readonly IFileProvider _fileProvider;
-        private Guid UserId => Guid.Parse(User.Claims.First().Value);
+        private Guid UserId => Guid.Parse(User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).First().Value);
 
         public FileController(IUserService userService, IFolderService folderService, IFileService fileService, IMapper mapper, IFileProvider fileProvider)
         {
@@ -32,6 +33,7 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
 
         public IActionResult AddFile(Guid? folderId)
         {
+            var a = UserId;
             return View(new FileModel { FolderId = folderId ?? UserId });
         }
         [HttpPost]
@@ -86,6 +88,7 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
             TempData["message"] = "File Name Updated";
             return RedirectToAction("index", "home");
         }
+        [HttpDelete]
         public IActionResult DeleteFile(Guid fileId)
         {
             var file = _fileService.GetById(fileId);
@@ -101,9 +104,10 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
 
             return Json(new {IsSuccess = true, Result = "File Deleted."});
         }
+        
         public IActionResult DownloadFile(Guid? fileId)
         {
-            MyCompany.FileSharingApp.Entities.Concrete.File file = _fileService.GetById((Guid)fileId);
+            var file = _fileService.GetById((Guid)fileId);
             var path = _fileProvider.GetDirectoryContents("").First(x => x.Name == "App_Data").PhysicalPath;
             var fullPath = file.FolderId == null ?
                 Path.Combine(path, UserId.ToString(), file.FileId.ToString()) :
@@ -114,5 +118,6 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
             byte[] buffer = System.IO.File.ReadAllBytes(fullPath);
             return File(buffer, mimeType, file.FileName + file.FileExtention);
         }
+
     }
 }

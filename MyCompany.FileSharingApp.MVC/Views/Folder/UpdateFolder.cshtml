@@ -3,8 +3,8 @@
     ViewData["Title"] = "AddFolder";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<form class="form-control" asp-action="addfolder" asp-controller="folder" method="post">
+<h1 class="text-center">Update Folder</h1>
+<form class="form-control" asp-action="updatefolder" asp-controller="folder" method="post">
     <input type="hidden" asp-for="FolderId" />
     <div class="mb-3">
         <label asp-for="FolderName">Folder Name</label>
@@ -12,10 +12,10 @@
         <span class="form-text text-danger d-block" asp-validation-for="FolderName"></span>
     </div>
     <div class="mb-3">
-        <label asp-for="FolderName">Folder Name</label>
+        <label asp-for="FolderName">Folder Description</label>
         <textarea class="form-control" asp-for="FolderDescription"></textarea>
         <span class="form-text text-danger d-block" asp-validation-for="FolderDescription"></span>
-    </div>
+    </div>    
     <button type="submit" class="btn btn-success">Save</button>
 </form>
 

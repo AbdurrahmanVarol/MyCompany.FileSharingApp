@@ -14,11 +14,38 @@
     })
 }
 $(document).ready(function () {
+
+    const exampleModal = document.getElementById('exampleModal')
+    exampleModal.addEventListener('show.bs.modal', event => {
+        const button = event.relatedTarget
+        // Extract info from data-bs-* attributes
+        const recipient = button.getAttribute('data-bs-whatever')
+        // If necessary, you could initiate an AJAX request here
+        // and then do the updating in a callback.
+        //
+        // Update the modal's content.
+        console.log(recipient)
+        const modalTitle = exampleModal.querySelector('.modal-title')
+        const modalBodyInput = exampleModal.querySelector('.modal-body input')
+        modalBodyInput.value = ""
+        $.ajax({
+            type: "GET",
+            url: `/disposablelink/createlink?fileId=${recipient}`,
+            success: function (data) {
+                console.log(data)
+                modalBodyInput.value = data
+            }
+        })
+    })
+
+
+    $('[data-toggle="tooltip"]').tooltip();
     $("#info").hide();
     loadData()
     $("#btnGetFolders").click(function () {
 
     })
+
 })
 
 let function1 = (data, parentFolderId = null) => {
@@ -45,22 +72,22 @@ let function1 = (data, parentFolderId = null) => {
                                                                                                             ${item.folderDescription}
                                                                                                 </span>
                                                                                                 <span class="btn-group">
-                                                                                                    <button class="btn btn-warning">
+                                                                                                    <a href="/folder/updateFolder?folderId=${item.folderId}" class="btn btn-custom-edit">
                                                                                                         <span>
                                                                                                                     <img src="/icons/wrench-adjustable.svg" />
                                                                                                         </span> Edit
-                                                                                                    </button>
-                                                                                                                   <button class="btn btn-danger" onclick="deleteFolder('${item.folderId}')">
+                                                                                                    </a>
+                                                                                                                   <button class="btn btn-custom-delete" onclick="deleteFolder('${item.folderId}')">
                                                                                                         <span>
                                                                                                                     <img src="/icons/trash-fill.svg" />
                                                                                                         </span> Delete
                                                                                                     </button>
-                                                                                                              <a class="btn btn-success" href="/folder/addfolder?folderId=${item.folderId}">
+                                                                                                              <a class="btn btn-custom-download" href="/folder/addfolder?folderId=${item.folderId}">
                                                                                                                 <span>
                                                                                                                                     <img src="/icons/iconfolderPlus.png" />
                                                                                                                 </span>New Folder
                                                                                                             </a>
-                                                                                                    <a class="btn btn-success" href="/file/addFile?folderId=${item.folderId}">
+                                                                                                    <a class="btn btn-custom-download" href="/file/addFile?folderId=${item.folderId}">
                                                                                                         <span>
                                                                                                             <img src="/icons/upload.svg" />
                                                                                                         </span> Upload New File
@@ -94,14 +121,17 @@ let func2 = (files) => {
                                                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${item.fileName}
                                                                     </span>
                                                                     <span class="btn-group">
-                                                                        <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                                                        <button class="btn btn-custom-share" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="${item.fileId}">
                                                                             <img src="/icons/share.svg" />
                                                                         </button>
-                                                                                <button onclick="deleteFile('${item.fileId}')" class="btn btn-danger">
+                                                                                <button onclick="deleteFile('${item.fileId}')" class="btn btn-custom-delete">
 
                                                                                             <img src="/icons/trash-fill.svg" />
                                                                                 </button>
-                                                                        <a href="/file/downloadFile?fileId=${item.fileId}" class="btn btn-secondary">
+                                                                        <a href="/file/updatefile?fileId=${item.fileId}" class="btn btn-custom-edit">
+                                                                            Edit
+                                                                        </a>
+                                                                        <a href="/file/downloadFile?fileId=${item.fileId}" class="btn btn-custom-download">
                                                                             <img src="/icons/download.svg" />
                                                                         </a>
                                                                     </span>
@@ -113,7 +143,7 @@ let func2 = (files) => {
 
 let deleteFile = (fileId) => {
     $.ajax({
-        type: "GET",
+        type: "DELETE",
         url: `/file/deletefile?fileId=${fileId}`,
         success: function (data) {
             if (data.isSuccess) {
@@ -128,7 +158,7 @@ let deleteFile = (fileId) => {
 
 let deleteFolder = (folderId) => {
     $.ajax({
-        type: "GET",
+        type: "DELETE",
         url: `/folder/deletefolder?folderId=${folderId}`,
         success: function (data) {
             if (data.isSuccess) {
