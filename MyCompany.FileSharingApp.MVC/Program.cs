@@ -5,6 +5,8 @@ using MyCompany.FileSharingApp.Business.Abstract;
 using MyCompany.FileSharingApp.Business.Concrete;
 using MyCompany.FileSharingApp.DataAccess.Abstract;
 using MyCompany.FileSharingApp.DataAccess.Concrete.EntityFramework;
+using MyCompany.FileSharingApp.MVC.NewFolder.FileTools;
+using MyCompany.FileSharingApp.MVC.NewFolder.FolderTools;
 using System.Reflection;
 using System.Text.Json.Serialization;
 
@@ -23,6 +25,9 @@ builder.Services.AddScoped<IFileDal, EfFileDal>();
 builder.Services.AddScoped<IFolderDal, EfFolderDal>();
 builder.Services.AddScoped<IUserDal, EfUserDal>();
 builder.Services.AddScoped<IDosposableLinkDal, EfDisposableLinkDal>();
+
+builder.Services.AddScoped<IFileTool, FileTool>();
+builder.Services.AddScoped<IFolderTool, FolderTool>();
 
 builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory()));
 

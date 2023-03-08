@@ -7,24 +7,27 @@ using MyCompany.FileSharingApp.Business.Abstract;
 using MyCompany.FileSharingApp.Entities.Concrete;
 using MyCompany.FileSharingApp.MVC.Filters;
 using MyCompany.FileSharingApp.MVC.Models;
+using MyCompany.FileSharingApp.MVC.NewFolder.FolderTools;
 using System.Security.Claims;
 
 namespace MyCompany.FileSharingApp.MVC.Controllers
 {
-    
+
     public class AuthController : Controller
     {
         private readonly IUserService _userService;
         private readonly IFolderService _folderService;
         private readonly IFileProvider _fileProvider;
         private readonly IMapper _mapper;
+        private readonly IFolderTool _folderTool;
 
-        public AuthController(IUserService userService, IMapper mapper, IFileProvider fileProvider, IFolderService folderService)
+        public AuthController(IUserService userService, IMapper mapper, IFileProvider fileProvider, IFolderService folderService, IFolderTool folderTool)
         {
             _userService = userService;
             _mapper = mapper;
             _fileProvider = fileProvider;
             _folderService = folderService;
+            _folderTool = folderTool;
         }
 
         public IActionResult Login()
@@ -77,22 +80,10 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
 
             _folderService.Add(newFolder);
 
-            try
-            {
-                var appData = _fileProvider.GetDirectoryContents("").First(p => p.Name.Equals("App_Data")).PhysicalPath;
-                string path = Path.Combine(appData, newUser.UserId.ToString());
+            var result = _folderTool.CreateFolder(newUser.UserId.ToString());
 
-                // If directory does not exist, create it
-                if (!Directory.Exists(path))
-                {
-                    Directory.CreateDirectory(path);
-                }
-            }
-            catch (Exception)
-            {
-            }
             TempData["Message"] = "Kullanıcı Eklendi!!!";
-            return RedirectToAction("index","home");
+            return RedirectToAction("index", "home");
         }
 
         public IActionResult Logout()

@@ -6,6 +6,8 @@ using MyCompany.FileSharingApp.Business.Abstract;
 using MyCompany.FileSharingApp.Entities.Concrete;
 using MyCompany.FileSharingApp.MVC.Filters;
 using MyCompany.FileSharingApp.MVC.Models;
+using MyCompany.FileSharingApp.MVC.NewFolder.FileTools;
+using MyCompany.FileSharingApp.MVC.NewFolder.FolderTools;
 
 namespace MyCompany.FileSharingApp.MVC.Controllers
 {
@@ -13,20 +15,16 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
     [CustomExceptionFilter]
     public class FolderController : Controller
     {
-        private readonly IUserService _userService;
         private readonly IFolderService _folderService;
-        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
-        private readonly IFileProvider _fileProvider;
+        private readonly IFolderTool _folderTool;
 
         private Guid UserId => Guid.Parse(User.Claims.First().Value);
-        public FolderController(IUserService userService, IFolderService folderService, IFileService fileService, IMapper mapper, IFileProvider fileProvider)
+        public FolderController(IFolderService folderService, IMapper mapper, IFolderTool folderTool)
         {
-            _userService = userService;
             _folderService = folderService;
-            _fileService = fileService;
             _mapper = mapper;
-            _fileProvider = fileProvider;
+            _folderTool = folderTool;
         }
 
         public IActionResult GetFolders()
@@ -60,22 +58,10 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
             newFolder.UserId = Guid.Parse(User.Claims.First().Value);
 
             _folderService.Add(newFolder);
-            var s = newFolder;
-            var x = _folderService.GetFolderPath(newFolder.FolderId);
-            try
-            {
-                var appData = _fileProvider.GetDirectoryContents("").First(p => p.Name.Equals("App_Data")).PhysicalPath;
-                string path = Path.Combine(appData, x);
 
-                // If directory does not exist, create it
-                if (!Directory.Exists(path))
-                {
-                    Directory.CreateDirectory(path);
-                }
-            }
-            catch (Exception)
-            {
-            }
+            var folderPath = _folderService.GetFolderPath(newFolder.FolderId);
+            var result = _folderTool.CreateFolder(folderPath);
+
             return RedirectToAction("Index", "home");
         }
         public IActionResult UpdateFolder(Guid folderId)
@@ -109,13 +95,9 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
             var folder = _folderService.GetById(folderId);
             var folderPath = _folderService.GetFolderPath(folderId);
             _folderService.Delete(folder);
-            var appData = _fileProvider.GetDirectoryContents("").First(p => p.Name.Equals("App_Data")).PhysicalPath;
-            string path = Path.Combine(appData, folderPath);
 
-            if (Directory.Exists(path))
-            {
-                Directory.Delete(path, true);
-            }
+            var result = _folderTool.DeleteFolder(folderPath);
+
             return Json(new { IsSuccess = true, Result = "Folder Deleted." });
         }
     }

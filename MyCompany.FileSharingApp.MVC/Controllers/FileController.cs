@@ -6,6 +6,7 @@ using MyCompany.FileSharingApp.Business.Abstract;
 using MyCompany.FileSharingApp.Entities.Concrete;
 using MyCompany.FileSharingApp.MVC.Filters;
 using MyCompany.FileSharingApp.MVC.Models;
+using MyCompany.FileSharingApp.MVC.NewFolder.FileTools;
 using System.Security.Claims;
 using static NuGet.Packaging.PackagingConstants;
 
@@ -20,15 +21,17 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
         private readonly IFileService _fileService;
         private readonly IMapper _mapper;
         private readonly IFileProvider _fileProvider;
+        private readonly IFileTool _fileTool;
         private Guid UserId => Guid.Parse(User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).First().Value);
 
-        public FileController(IUserService userService, IFolderService folderService, IFileService fileService, IMapper mapper, IFileProvider fileProvider)
+        public FileController(IUserService userService, IFolderService folderService, IFileService fileService, IMapper mapper, IFileProvider fileProvider, IFileTool fileTool)
         {
             _userService = userService;
             _folderService = folderService;
             _fileService = fileService;
             _mapper = mapper;
             _fileProvider = fileProvider;
+            _fileTool = fileTool;
         }
 
         public IActionResult AddFile(Guid? folderId)
@@ -54,8 +57,6 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
             _fileService.Add(file);
 
             var path = _fileProvider.GetDirectoryContents("").First(x => x.Name == "App_Data").PhysicalPath;
-
-
 
             var folderPath = _folderService.GetFolderPath((Guid)fileModel.FolderId);
 
@@ -94,13 +95,8 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
             var file = _fileService.GetById(fileId);
             _fileService.Delete(file);
             var folderPath = _folderService.GetFolderPath((Guid)file.FolderId);
-            var appData = _fileProvider.GetDirectoryContents("").First(p => p.Name.Equals("App_Data")).PhysicalPath;
-            string path = Path.Combine(appData, folderPath, file.FileId.ToString()); ;
-
-            if (System.IO.File.Exists(path))
-            {
-                System.IO.File.Delete(path);
-            }
+            var filePath = Path.Combine(folderPath, file.FileId.ToString());
+            var result = _fileTool.DeleteFile(filePath);          
 
             return Json(new {IsSuccess = true, Result = "File Deleted."});
         }
