@@ -15,13 +15,16 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-action="addfolder" asp-controller="folder"> Add New Folder</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-action="addfile" asp-controller="file"> Add New file</a>
+                        <div class="dropdown">
+                            <button class="border-0 nav-link text-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">New </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-action="addfolder" asp-controller="folder"> Add New Folder</a></li>
+                                <li><a class="dropdown-item" asp-action="addfile" asp-controller="file"> Add New file</a></li>
+                            </ul>
+                        </div>
                     </li>
                 </ul>
-                <a class="nav-item mr-3 nav-link p-3"  asp-action="logout" asp-controller="auth" >Logout</a>
+                <a class="nav-item mr-3 nav-link p-3" asp-action="logout" asp-controller="auth">Logout</a>
             </div>
         </div>
     </nav>
