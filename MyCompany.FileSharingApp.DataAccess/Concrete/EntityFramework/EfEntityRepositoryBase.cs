@@ -36,15 +36,9 @@ namespace MyCompany.FileSharingApp.DataAccess.Concrete.EntityFramework
             _context.SaveChanges();
         }
 
-        public TEntity Get(Expression<Func<TEntity, bool>> filter)
-        {
-            return _context.Set<TEntity>().FirstOrDefault(filter);
-        }
+        public TEntity Get(Expression<Func<TEntity, bool>> filter) => _context.Set<TEntity>().FirstOrDefault(filter);
 
-        public List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null)
-        {
-            return filter == null ? _context.Set<TEntity>().ToList() : _context.Set<TEntity>().Where(filter).ToList();
-        }
+        public List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null) => filter == null ? _context.Set<TEntity>().ToList() : _context.Set<TEntity>().Where(filter).ToList();
 
         public void Update(TEntity entity)
         {

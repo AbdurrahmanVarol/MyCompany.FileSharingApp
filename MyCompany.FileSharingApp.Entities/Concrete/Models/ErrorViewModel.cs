@@ -1,4 +1,4 @@
-namespace MyCompany.FileSharingApp.MVC.Models
+namespace MyCompany.FileSharingApp.Entities.Concrete
 {
     public class ErrorViewModel
     {

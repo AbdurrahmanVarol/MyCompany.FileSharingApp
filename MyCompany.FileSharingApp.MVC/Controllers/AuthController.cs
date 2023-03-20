@@ -6,7 +6,6 @@ using Microsoft.Extensions.FileProviders;
 using MyCompany.FileSharingApp.Business.Abstract;
 using MyCompany.FileSharingApp.Entities.Concrete;
 using MyCompany.FileSharingApp.MVC.Filters;
-using MyCompany.FileSharingApp.MVC.Models;
 using MyCompany.FileSharingApp.MVC.NewFolder.FolderTools;
 using System.Security.Claims;
 
@@ -20,14 +19,16 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
         private readonly IFileProvider _fileProvider;
         private readonly IMapper _mapper;
         private readonly IFolderTool _folderTool;
+        IAuthService _authService;
 
-        public AuthController(IUserService userService, IMapper mapper, IFileProvider fileProvider, IFolderService folderService, IFolderTool folderTool)
+        public AuthController(IUserService userService, IMapper mapper, IFileProvider fileProvider, IFolderService folderService, IFolderTool folderTool, IAuthService authService)
         {
             _userService = userService;
             _mapper = mapper;
             _fileProvider = fileProvider;
             _folderService = folderService;
             _folderTool = folderTool;
+            _authService = authService;
         }
 
         public IActionResult Login()
@@ -37,8 +38,8 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
         [HttpPost]
         public IActionResult Login(LoginModel loginModel)
         {
-            var user = _userService.GetByUserName(loginModel.UserName);
-            if (user != null && loginModel.Password.Equals(user.Password))
+            var user = _authService.Login(loginModel);
+            if (user != null)
             {
                 List<Claim> claims = new List<Claim>
                 {
@@ -67,8 +68,7 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
         [HttpPost]
         public IActionResult Register(UserModel userModel)
         {
-            var newUser = _mapper.Map<MyCompany.FileSharingApp.Entities.Concrete.User>(userModel);
-            _userService.Add(newUser);
+            var newUser = _authService.Register(userModel);
 
             var newFolder = new Folder
             {

@@ -5,7 +5,6 @@ using Microsoft.Extensions.FileProviders;
 using MyCompany.FileSharingApp.Business.Abstract;
 using MyCompany.FileSharingApp.Entities.Concrete;
 using MyCompany.FileSharingApp.MVC.Filters;
-using MyCompany.FileSharingApp.MVC.Models;
 using MyCompany.FileSharingApp.MVC.NewFolder.FileTools;
 using MyCompany.FileSharingApp.MVC.NewFolder.FolderTools;
 

@@ -12,7 +12,7 @@ using MyCompany.FileSharingApp.DataAccess.Concrete.EntityFramework;
 namespace MyCompany.FileSharingApp.DataAccess.Migrations
 {
     [DbContext(typeof(FileSharingAppContext))]
-    [Migration("20230303093602_CreateTables")]
+    [Migration("20230320120136_CreateTables")]
     partial class CreateTables
     {
         /// <inheritdoc />
@@ -141,9 +141,13 @@ namespace MyCompany.FileSharingApp.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
+                    b.Property<byte[]>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("UserName")
                         .IsRequired()

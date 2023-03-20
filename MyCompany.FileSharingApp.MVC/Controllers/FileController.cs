@@ -5,10 +5,8 @@ using Microsoft.Extensions.FileProviders;
 using MyCompany.FileSharingApp.Business.Abstract;
 using MyCompany.FileSharingApp.Entities.Concrete;
 using MyCompany.FileSharingApp.MVC.Filters;
-using MyCompany.FileSharingApp.MVC.Models;
 using MyCompany.FileSharingApp.MVC.NewFolder.FileTools;
 using System.Security.Claims;
-using static NuGet.Packaging.PackagingConstants;
 
 namespace MyCompany.FileSharingApp.MVC.Controllers
 {
@@ -16,7 +14,6 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
     [CustomExceptionFilter]
     public class FileController : Controller
     {
-        private readonly IUserService _userService;
         private readonly IFolderService _folderService;
         private readonly IFileService _fileService;
         private readonly IMapper _mapper;
@@ -24,9 +21,8 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
         private readonly IFileTool _fileTool;
         private Guid UserId => Guid.Parse(User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).First().Value);
 
-        public FileController(IUserService userService, IFolderService folderService, IFileService fileService, IMapper mapper, IFileProvider fileProvider, IFileTool fileTool)
+        public FileController(IFolderService folderService, IFileService fileService, IMapper mapper, IFileProvider fileProvider, IFileTool fileTool)
         {
-            _userService = userService;
             _folderService = folderService;
             _fileService = fileService;
             _mapper = mapper;
@@ -66,7 +62,7 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
 
             fileModel.FormFile.CopyTo(stream);
             stream.Close();
-            return RedirectToAction("Index","home");
+            return RedirectToAction("Index", "home");
         }
         public IActionResult UpdateFile(Guid fileId)
         {
@@ -96,11 +92,11 @@ namespace MyCompany.FileSharingApp.MVC.Controllers
             _fileService.Delete(file);
             var folderPath = _folderService.GetFolderPath((Guid)file.FolderId);
             var filePath = Path.Combine(folderPath, file.FileId.ToString());
-            var result = _fileTool.DeleteFile(filePath);          
+            var result = _fileTool.DeleteFile(filePath);
 
-            return Json(new {IsSuccess = true, Result = "File Deleted."});
+            return Json(new { IsSuccess = true, Result = "File Deleted." });
         }
-        
+
         public IActionResult DownloadFile(Guid? fileId)
         {
             var file = _fileService.GetById((Guid)fileId);

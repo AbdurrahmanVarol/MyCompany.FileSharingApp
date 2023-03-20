@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
-using MyCompany.FileSharingApp.MVC.Models;
+using MyCompany.FileSharingApp.Entities.Concrete;
 
 namespace MyCompany.FileSharingApp.MVC.Filters
 {

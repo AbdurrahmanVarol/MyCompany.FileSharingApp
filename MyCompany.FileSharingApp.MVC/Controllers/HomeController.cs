@@ -6,7 +6,6 @@ using Microsoft.Extensions.FileProviders;
 using MyCompany.FileSharingApp.Business.Abstract;
 using MyCompany.FileSharingApp.Entities.Concrete;
 using MyCompany.FileSharingApp.MVC.Filters;
-using MyCompany.FileSharingApp.MVC.Models;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.IO;

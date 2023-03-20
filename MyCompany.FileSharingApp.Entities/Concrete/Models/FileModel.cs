@@ -1,4 +1,6 @@
-﻿namespace MyCompany.FileSharingApp.MVC.Models
+﻿using Microsoft.AspNetCore.Http;
+
+namespace MyCompany.FileSharingApp.Entities.Concrete
 {
     public class FileModel
     {

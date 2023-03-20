@@ -16,6 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
+builder.Services.AddScoped<IAuthService,AuthManager>();
 builder.Services.AddScoped<IUserService, UserManager>();
 builder.Services.AddScoped<IFileService, FileManager>();
 builder.Services.AddScoped<IFolderService, FolderManager>();
@@ -70,9 +71,9 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Auth}/{action=Login}/{id?}");
 
-//using (var scope = app.Services.GetService<IServiceScopeFactory>().CreateScope())
-//{
-//    scope.ServiceProvider.GetRequiredService<FileSharingAppContext>().Database.Migrate();
-//}
+using (var scope = app.Services.GetService<IServiceScopeFactory>().CreateScope())
+{
+    scope.ServiceProvider.GetRequiredService<FileSharingAppContext>().Database.Migrate();
+}
 
 app.Run();
